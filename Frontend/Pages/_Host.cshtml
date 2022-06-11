@@ -1,0 +1,9 @@
+﻿@page "/"
+@namespace Frontend.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using SharedResourcesClientFront
+@{
+    Layout = "_Layout";
+}
+
+<component type="typeof(App)" render-mode="ServerPrerendered" />

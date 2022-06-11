@@ -1,0 +1,22 @@
+﻿
+<div class="flex bg-black-900 text-white-100 h-12 items-center px-12">
+    <div class="flex flex-row">
+        <NavLink class="px-4 text-white-600 hover:text-white-100" href="" Match="NavLinkMatch.All">Home</NavLink>
+    </div>
+    <input class="ml-auto" type="text" />
+    <div class="flex flex-row ml-auto">
+        <NavLink class="px-4 text-white-600 hover:text-white-100" href="counter">Counter</NavLink>
+        <NavLink class="px-4 text-white-600 hover:text-white-100" href="fetchdata"> Fetch data</NavLink>
+    </div>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

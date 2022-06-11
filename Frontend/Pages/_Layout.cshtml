@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@namespace Frontend.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="~/" />
+    <link href="_content/SharedResourcesClientFront/css/app.min.css" rel="stylesheet" />
+    <link href="_content/SharedResourcesClientFront/css/test.css" rel="stylesheet" type="text/css" />
+    <!--<link href="Frontend.styles.css" rel="stylesheet" />-->
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+</head>
+<body class="">
+    @RenderBody()
+    <script src="_content/BlazorPanzoom/panzoom.min.js"></script>
+    <script src="_content/BlazorPanzoom/blazorpanzoom.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

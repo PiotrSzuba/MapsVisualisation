@@ -1,0 +1,109 @@
+﻿@page "/"
+
+<PageTitle>Historic maps of south-west Poland</PageTitle>
+
+@{
+    #pragma warning disable 8625
+    #pragma warning disable 8602
+    <div class="test">
+        <Panzoom @ref="_panzoom">
+            <div class="min-w-max" @ref="@context.ElementReference"
+                @onmousemove="e => HandleMouseButton(e,true)" 
+                @onmouseup="e => HandleMouseButton(e,true)">
+                <div class="grid grid-cols-32">
+                    @{index = 3550;}
+                    @for (int x=0;x<896;x++)
+                    {
+                        if(x % 32 == 0 && x != 0)
+                        {
+                            index += 68;
+                        }
+                        var temp = index; //onclick
+                        <div class="h-12 w-12 border-2 border-black-900 m-1px hover:border-red-400" @onmousedown="RegionClickDown" @onmouseup="(e) => RegionClickUp(e,temp)">@index</div>
+                        index++;
+                    }
+                </div>
+            </div>
+        </Panzoom>
+    </div>
+    #pragma warning restore 8625
+    #pragma warning restore 8602
+}
+<button @onclick="OnZoomInClick">Zoom in</button>
+<button @onclick="OnZoomOutClick">Zoom out</button>
+<input type="range" min="0.1" max="4" step="0.1" @bind-value="RangeValue" @bind-value:event="oninput"/>
+
+
+@code{
+    #nullable enable
+
+    private Panzoom _panzoom = new();
+
+    private double _rangeValue = 1.0;
+    private int index { get; set; }
+    private double oldPosX { get; set; }
+    private double oldPosY { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _panzoom.SetOptionsAsync(new PanzoomOptions { DisablePan = true });
+        oldPosX = 0;
+        oldPosY = 0;
+    }
+
+
+    private async Task OnZoomInClick(MouseEventArgs args)
+    {
+        await _panzoom.ZoomInAsync();
+        await UpdateSlider();
+    }
+
+    private async Task HandleMouseButton(MouseEventArgs e,bool disablePan)
+    {
+        if(e.Buttons != 1)
+        {
+            return;        
+        }
+        Console.WriteLine(disablePan.ToString());
+        await _panzoom.SetOptionsAsync(new PanzoomOptions { DisablePan = disablePan });
+    }
+
+    private async Task OnZoomOutClick(MouseEventArgs args)
+    {
+        await _panzoom.ZoomOutAsync();
+        await UpdateSlider();
+    }
+
+    private double RangeValue
+    {
+        get => _rangeValue;
+        set
+        {
+            _rangeValue = value;
+            _panzoom.ZoomAsync(value);
+        }
+    }
+
+    private void RegionClickDown()
+    {
+        //oldPosX = args.ClientX;
+        //oldPosY = args.ClientY;
+        //Console.WriteLine($"{oldPosX} , {oldPosY}");
+        Console.WriteLine("essa");
+    }
+
+    private void RegionClickUp(MouseEventArgs args,int index)
+    {
+        Console.WriteLine($"{oldPosX} , {oldPosY} new => {args.ClientX} , {args.ClientY} ");
+        if(oldPosX + 5 >= args.ClientX && oldPosX - 5 <= args.ClientX && oldPosY + 5 >= args.ClientY && oldPosY - 5 <= args.ClientY)
+        {
+            Console.WriteLine(index);            
+        }
+    }
+
+    private async Task UpdateSlider()
+    {
+        var scale = await _panzoom.GetScaleAsync();
+        _rangeValue = scale;
+    }
+}
