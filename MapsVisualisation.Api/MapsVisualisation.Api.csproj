@@ -7,6 +7,17 @@
 	<UserSecretsId>f4c3ac32-26d3-43bb-990d-ad6077caa07c</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="MapsImages\**" />
+    <Compile Remove="Thumbnails\**" />
+    <Content Remove="MapsImages\**" />
+    <Content Remove="Thumbnails\**" />
+    <EmbeddedResource Remove="MapsImages\**" />
+    <EmbeddedResource Remove="Thumbnails\**" />
+    <None Remove="MapsImages\**" />
+    <None Remove="Thumbnails\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="11.0.0" />
