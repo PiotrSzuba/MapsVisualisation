@@ -5,6 +5,7 @@ using MapsVisualisation.Domain.Exceptions;
 using MapsVisualisation.Domain.Entities;
 using MapsVisualisation.Service.Features.Regions.Shared;
 using MapsVisualisation.Domain.Helpers;
+using MapsVisualisation.Service.Services;
 
 namespace MapsVisualisation.Service.Features.Regions.Queries;
 
@@ -13,10 +14,12 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
     internal class ALlRegionsQueryHandler : IQueryHandler<AllRegionsQuery, List<RegionDto>>
     {
         private readonly MapsVisualisationContext _context;
+        private readonly IPathProvider _pathProvider;
 
-        public ALlRegionsQueryHandler(MapsVisualisationContext context)
+        public ALlRegionsQueryHandler(MapsVisualisationContext context, IPathProvider pathProvider)
         {
             _context = context;
+            _pathProvider = pathProvider;
         }
 
         public async Task<List<RegionDto>> Handle(AllRegionsQuery request, CancellationToken cancellationToken)
@@ -44,7 +47,7 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
                 SWLat = region.SWLat,
                 SWLong = region.SWLong,
                 Type = region.RegionType,
-                Maps = RegionDto.Mapper.MapMaps(region.Maps.ToList()),
+                Maps = RegionDto.Mapper.MapMaps(region.Maps.ToList(), _pathProvider),
             }).ToList();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using MapsVisualisation.Domain.Entities;
+using MapsVisualisation.Service.Services;
 
 namespace MapsVisualisation.Service.Features.Regions.Shared;
 
@@ -22,17 +23,17 @@ public class RegionDto
 
     public static class Mapper
     {
-        public static List<MapDto> MapMaps(List<Map> maps)
+        public static List<MapDto> MapMaps(List<Map> maps, IPathProvider pathProvider)
         {
             return maps
                 .DistinctBy(map => map.Thumbnail)
-                .Select(map => MapMapDto(map))
+                .Select(map => MapMapDto(map, pathProvider))
                 .OrderByDescending(map => map.PublishYear)
                 .ThenBy(map => map.Dpi)
                 .ToList();
         }
 
-        private static MapDto MapMapDto(Map map)
+        private static MapDto MapMapDto(Map map, IPathProvider pathProvider)
         {
             return new MapDto
             {
@@ -41,7 +42,7 @@ public class RegionDto
                 Dpi = map.Dpi,
                 CollectionName = map.CollectionName,
                 ImageUrl = map.ImageUrl,
-                Thumbnail = @"https://localhost:7178/Thumbnails/" + map.Thumbnail,
+                Thumbnail = @$"https://localhost:7178/{pathProvider.GetThumbnailsFolder()}/" + map.Thumbnail,
             };
         }
     }

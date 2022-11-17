@@ -22,7 +22,7 @@ builder.Services.AddServicesDependency();
 
 var app = builder.Build();
 
-app.ConfigureStaticFiles(builder.Environment.ContentRootPath);
+app.ConfigureStaticFiles(builder.Environment.ContentRootPath, PathProvider.ThumbnailsFolder, PathProvider.MapsImagesFolder);
 
 app.ConfigureExceptionHandler();
 

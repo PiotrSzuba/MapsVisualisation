@@ -4,10 +4,10 @@ namespace MapsVisualisation.Api.Infrastructure.Extensions;
 
 public static class StaticFilesConfiguration
 {
-    public static void ConfigureStaticFiles(this IApplicationBuilder app, string rootPath)
+    public static void ConfigureStaticFiles(this IApplicationBuilder app, string rootPath, string thumbnailsFolder, string mapImagesFolder)
     {
-        app.ConfigureDirectory(rootPath, "Thumbnails");
-        app.ConfigureDirectory(rootPath, "MapsImages");
+        app.ConfigureDirectory(rootPath, thumbnailsFolder);
+        app.ConfigureDirectory(rootPath, mapImagesFolder);
     }
 
     private static void ConfigureDirectory(this IApplicationBuilder app, string rootPath, string folderName)
