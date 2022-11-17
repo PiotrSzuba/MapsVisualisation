@@ -41,7 +41,7 @@ public class RegionDto
                 Dpi = map.Dpi,
                 CollectionName = map.CollectionName,
                 ImageUrl = map.ImageUrl,
-                Thumbnail = @"https://localhost:7178/thumbnails/" + map.Thumbnail,
+                Thumbnail = @"https://localhost:7178/Thumbnails/" + map.Thumbnail,
             };
         }
     }

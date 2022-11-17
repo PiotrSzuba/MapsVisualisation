@@ -16,7 +16,7 @@ public class PathProvider : IPathProvider
     public PathProvider(string root)
     {
         Root = root;
-        ThumbnailsPath = Path.Combine(root, "thumbnails");
+        ThumbnailsPath = Path.Combine(root, "Thumbnails");
         MapsImagesPath = Path.Combine(root, "MapsImages");
     }
 

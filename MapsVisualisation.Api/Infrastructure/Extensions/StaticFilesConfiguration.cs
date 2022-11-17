@@ -6,7 +6,7 @@ public static class StaticFilesConfiguration
 {
     public static void ConfigureStaticFiles(this IApplicationBuilder app, string rootPath)
     {
-        app.ConfigureDirectory(rootPath, "thumbnails");
+        app.ConfigureDirectory(rootPath, "Thumbnails");
         app.ConfigureDirectory(rootPath, "MapsImages");
     }
 
