@@ -189,9 +189,14 @@
 			return mapStore;
 		};
 
+		const reset = (mapStore: IMapStoreData) => {
+			mapStore = defaultMapStore;
+			return mapStore;
+		};
+
 		return {
 			subscribe,
-			reset: () => set(defaultMapStore),
+			reset: () => update(mapStore => reset(mapStore)),
 			addLayer: (graphicLayer: GraphicsLayer) => update(mapStore => addLayer(mapStore, graphicLayer)),
 			switchLayers: () => update(mapStore => switchLayers(mapStore)),
 			updateZoom: (zoom: number) => update(mapStore => handleZoomChange(mapStore, zoom)),

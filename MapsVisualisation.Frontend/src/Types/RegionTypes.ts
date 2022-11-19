@@ -1,4 +1,4 @@
-import type { IMap } from 'src/Types';
+import type { IMap, IOtherSource } from 'src/Types';
 
 export enum RegionType {
     IgrekAmzp,
@@ -28,4 +28,5 @@ export interface IRegion {
     regionIdentity: string;
     type: RegionType;
     maps?: IMap[];
+    otherSources?: IOtherSource[];
 }

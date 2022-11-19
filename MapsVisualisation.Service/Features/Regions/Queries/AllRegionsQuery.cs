@@ -26,6 +26,7 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
         {
             var regions = await _context.Regions
                 .Include(r => r.Maps)
+                .Include(r => r.OtherSources)
                 .ToListAsync(cancellationToken);
 
             if (regions is null || regions.Count == 0)
