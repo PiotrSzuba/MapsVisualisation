@@ -48,6 +48,7 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
                 SWLong = region.SWLong,
                 Type = region.RegionType,
                 Maps = RegionDto.Mapper.MapMaps(region.Maps.ToList(), _pathProvider),
+                OtherSources = RegionDto.Mapper.MapOtherSources(region.OtherSources.ToList()),
             }).ToList();
         }
     }

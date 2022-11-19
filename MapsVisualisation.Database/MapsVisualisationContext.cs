@@ -20,6 +20,7 @@ public class MapsVisualisationContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new RegionMapper());
         modelBuilder.ApplyConfiguration(new MapMapper());
+        modelBuilder.ApplyConfiguration(new OtherSourceMapper());
     }
 
     public DbSet<Region> Regions { get; set; }

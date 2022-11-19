@@ -20,6 +20,7 @@ public class RegionDto
     public double SWLong { get; set; }
     public RegionType Type { get; set; }
     public List<MapDto>? Maps { get; set; }
+    public List<OtherSourcesDto>? OtherSources { get; set; }
 
     public static class Mapper
     {
@@ -44,6 +45,13 @@ public class RegionDto
                 ImageUrl = map.ImageUrl,
                 Thumbnail = @$"https://localhost:7178/{pathProvider.GetThumbnailsFolder()}/" + map.Thumbnail,
             };
+        }
+
+        public static List<OtherSourcesDto> MapOtherSources(List<OtherSource> otherSources)
+        {
+            return otherSources
+                .Select(os => OtherSourcesDto.Mapper.Map(os))
+                .ToList();
         }
     }
 }

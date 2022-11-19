@@ -15,5 +15,8 @@ public static class ScraperController
 
         app.MapGet("/scrapAllImages", async (IMediator mediator) =>
             await mediator.Send(new SrapAllImagesCommand()));
+
+        app.MapGet("/scrapSbc", async (IMediator mediator) =>
+            await mediator.Send(new ScrapSbcCommand()));
     }
 }

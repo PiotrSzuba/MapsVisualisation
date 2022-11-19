@@ -17,7 +17,7 @@ public class OtherSource
         Year = year;
     }
 
-    public OtherSource Create(Region region, string name, string url, int? year)
+    public static OtherSource Create(Region region, string name, string url, int? year)
     {
         return new OtherSource(name, url, year)
         {

@@ -5,7 +5,7 @@ namespace MapsVisualisation.Domain.Entities;
 public class Region
 {
     private List<Map> _maps = new();
-    private List<OtherSource> _OtherSources = new();
+    private List<OtherSource> _otherSources = new();
 
     public Guid Id { get; private set; }
     public string? RegionName1 { get; private set; } = string.Empty;
@@ -22,7 +22,7 @@ public class Region
     public double SWLong { get; private set; }
     public RegionType RegionType { get; private set; }
     public IReadOnlyCollection<Map> Maps => _maps.AsReadOnly();
-    public IReadOnlyCollection<OtherSource> OtherSources => _OtherSources.AsReadOnly();
+    public IReadOnlyCollection<OtherSource> OtherSources => _otherSources.AsReadOnly();
 
     public Region() { } //ef
 
@@ -46,6 +46,11 @@ public class Region
     public void AddMap(int year, int dpi, string imageUrl, string? collectionName = null, string? thumbnail = null)
     {
         _maps.Add(Map.Create(this, year, dpi, imageUrl, collectionName, thumbnail));
+    }
+
+    public void AddOtherSource(string name, string url, int? year)
+    {
+        _otherSources.Add(OtherSource.Create(this, name, url, year));
     }
 
     private RegionType GetRegionType()
