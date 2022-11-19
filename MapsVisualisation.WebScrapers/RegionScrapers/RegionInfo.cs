@@ -1,4 +1,4 @@
-﻿namespace MapsVisualisation.WebScrapers;
+﻿namespace MapsVisualisation.WebScrapers.RegionScrapers;
 
 public class RegionInfo
 {
@@ -25,7 +25,7 @@ public class RegionInfo
                 RegionName1 = names[0];
                 RegionName2 = names[1];
                 RegionName3 = names[2];
-                break;             
+                break;
         }
 
         Maps = maps;

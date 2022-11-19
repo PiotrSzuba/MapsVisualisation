@@ -24,5 +24,6 @@ public class MapsVisualisationContext : DbContext
 
     public DbSet<Region> Regions { get; set; }
     public DbSet<Map> Maps { get; set; }
+    public DbSet<OtherSource> OtherSources { get; set; }
 
 }

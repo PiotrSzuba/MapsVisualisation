@@ -1,7 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 
-namespace MapsVisualisation.WebScrapers;
+namespace MapsVisualisation.WebScrapers.RegionScrapers;
 
 public static class IgrekAmzpScraper
 {
@@ -18,15 +18,9 @@ public static class IgrekAmzpScraper
             throw new Exception("Could not load the site !");
 
         var body = htmlDoc.DocumentNode.SelectSingleNode("/html[1]/body[1]");
-        var content = body.ChildNodes.SingleOrDefault(c => c.Id == "content");
+        var content = body.ChildNodes.Single(c => c.Id == "content");
 
-        if (content is null)
-            throw new Exception("Content does not exists !");
-
-        var mapContent = content.ChildNodes.SingleOrDefault(c => c.GetClasses().Contains("mapcont"));
-
-        if (mapContent is null)
-            throw new Exception("Map content does not exists !");
+        var mapContent = content.ChildNodes.Single(c => c.GetClasses().Contains("mapcont"));
 
         var mapsInfos = mapContent.ChildNodes.Where(c => c.GetClasses().Contains("mapind")).ToList();
 
@@ -38,10 +32,7 @@ public static class IgrekAmzpScraper
             var hasLink = mapInfo.ChildNodes.Any(c => c.Name == "a");
             if (hasLink)
             {
-                var link = mapInfo.ChildNodes.SingleOrDefault(c => c.Name == "a");
-
-                if (link is null)
-                    throw new Exception("How link is not a link?");
+                var link = mapInfo.ChildNodes.Single(c => c.Name == "a");
 
                 var mapInfos = GetMapsInfos(link);
 
@@ -57,8 +48,6 @@ public static class IgrekAmzpScraper
                 names = GetNamesInParentheses(names);
 
                 regions.Add(new RegionInfo(identity, names, mapInfos));
-
-                //Console.WriteLine($"{identity} {names.Count} names: {names.First()} maps: {mapInfos.Count}");
             }
             else
             {
@@ -74,8 +63,6 @@ public static class IgrekAmzpScraper
                 names = GetNamesInParentheses(names);
 
                 regions.Add(new RegionInfo(identity, names));
-
-                //Console.WriteLine($"{identity} {names.Count} names: {names.FirstOrDefault()} No image !");
             }
         }
 

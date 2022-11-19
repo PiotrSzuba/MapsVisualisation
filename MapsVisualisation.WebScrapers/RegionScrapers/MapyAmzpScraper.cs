@@ -1,7 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Text;
 
-namespace MapsVisualisation.WebScrapers;
+namespace MapsVisualisation.WebScrapers.RegionScrapers;
 
 public static class MapyAmzpScraper
 {

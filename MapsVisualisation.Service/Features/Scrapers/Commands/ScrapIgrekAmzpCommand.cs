@@ -1,6 +1,6 @@
 ﻿using MapsVisualisation.Service.Features.Scrapers.Shared;
 using MapsVisualisation.Service.BuildingBlocks;
-using MapsVisualisation.WebScrapers;
+using MapsVisualisation.WebScrapers.RegionScrapers;
 
 namespace MapsVisualisation.Service.Features.Scrapers.Commands;
 

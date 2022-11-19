@@ -1,12 +1,11 @@
 ﻿using MapsVisualisation.Domain.Exceptions;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MapsVisualisation.Domain.Entities;
 
 public class Region
 {
     private List<Map> _maps = new();
+    private List<OtherSource> _OtherSources = new();
 
     public Guid Id { get; private set; }
     public string? RegionName1 { get; private set; } = string.Empty;
@@ -23,6 +22,7 @@ public class Region
     public double SWLong { get; private set; }
     public RegionType RegionType { get; private set; }
     public IReadOnlyCollection<Map> Maps => _maps.AsReadOnly();
+    public IReadOnlyCollection<OtherSource> OtherSources => _OtherSources.AsReadOnly();
 
     public Region() { } //ef
 

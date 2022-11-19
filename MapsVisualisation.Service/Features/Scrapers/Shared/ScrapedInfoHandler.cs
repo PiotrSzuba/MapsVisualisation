@@ -4,7 +4,8 @@ using MapsVisualisation.Domain.Exceptions;
 using MapsVisualisation.Service.Services;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
-using MapsVisualisation.WebScrapers;
+using MapsVisualisation.WebScrapers.RegionScrapers;
+using MapsVisualisation.WebScrapers.Helpers;
 
 namespace MapsVisualisation.Service.Features.Scrapers.Shared;
 

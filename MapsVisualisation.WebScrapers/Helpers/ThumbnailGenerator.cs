@@ -1,7 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
-namespace MapsVisualisation.WebScrapers;
+namespace MapsVisualisation.WebScrapers.Helpers;
 
 public static class ThumbnailGenerator
 {
