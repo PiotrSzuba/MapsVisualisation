@@ -51,6 +51,8 @@ public class RegionDto
         {
             return otherSources
                 .Select(os => OtherSourcesDto.Mapper.Map(os))
+                .OrderBy(os => os.Name)
+                .ThenBy(os => os.Year)
                 .ToList();
         }
     }

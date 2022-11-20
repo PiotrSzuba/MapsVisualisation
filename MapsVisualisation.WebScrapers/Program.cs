@@ -7,11 +7,17 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 //MapyAmzpScrapper.Run();
 //IgrekAmzpScraper.Run();
-SbcScrapper.Run(MockRegion());
-
+//SbcScrapper.Run(MockRegion());
+BcuwScrapper.Run(MockRegion());
+//KpbcScraper.Run(MockRegion2());
 
 
 static Region MockRegion()
 {
-    return Region.Create("Breslau(Nord)", "", "", "4868");
+    return Region.Create("Ostritz", "", "", "4955");
+}
+
+static Region MockRegion2()
+{
+    return Region.Create("Przeróśl", "", "", "P31 S35");
 }
