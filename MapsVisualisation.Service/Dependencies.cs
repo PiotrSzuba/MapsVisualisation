@@ -13,10 +13,10 @@ public static class Dependencies
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(WorkBehavior<,>));
 
-        services.AddDomainServices();
+        services.AddScopedServices();
     }
 
-    private static IServiceCollection AddDomainServices(this IServiceCollection services)
+    private static IServiceCollection AddScopedServices(this IServiceCollection services)
     {
         services.AddScoped<IScrapedInfoHandler, ScrapedInfoHandler>();
 
