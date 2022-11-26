@@ -1,14 +1,14 @@
 ﻿using System.Text;
-using MapsVisualisation.Database;
 using MapsVisualisation.Domain.Entities;
 using MapsVisualisation.WebScrapers.OtherSourcesScrapers;
+using MapsVisualisation.WebScrapers.RegionScrapers;
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-//MapyAmzpScrapper.Run();
+//MapyAmzpScraper.Run();
 //IgrekAmzpScraper.Run();
 //SbcScrapper.Run(MockRegion());
-BcuwScrapper.Run(MockRegion());
+//BcuwScrapper.Run(MockRegion());
 //KpbcScraper.Run(MockRegion2());
 
 

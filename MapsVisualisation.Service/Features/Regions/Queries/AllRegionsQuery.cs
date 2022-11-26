@@ -11,12 +11,12 @@ namespace MapsVisualisation.Service.Features.Regions.Queries;
 
 public class AllRegionsQuery : IQuery<List<RegionDto>>
 {
-    internal class ALlRegionsQueryHandler : IQueryHandler<AllRegionsQuery, List<RegionDto>>
+    internal class AllRegionsQueryHandler : IQueryHandler<AllRegionsQuery, List<RegionDto>>
     {
         private readonly MapsVisualisationContext _context;
         private readonly IPathProvider _pathProvider;
 
-        public ALlRegionsQueryHandler(MapsVisualisationContext context, IPathProvider pathProvider)
+        public AllRegionsQueryHandler(MapsVisualisationContext context, IPathProvider pathProvider)
         {
             _context = context;
             _pathProvider = pathProvider;
