@@ -7,6 +7,17 @@
 	import Point from '@arcgis/core/geometry/Point';
 	import { regionWithMaps, regionWithNoMaps, selectedRegion } from 'src/Components';
 
+	enum LayerNames {
+		mapyLayer,
+		mapyTextLayer,
+		mapySmTextLayer,
+		mapyXsTextLayer,
+		igrekLayer,
+		igrekTextLayer,
+		igrekSmTextLater,
+		igrekXsTextLayer,
+	}
+
 	interface IMapStoreActions {
 		subscribe: (this: void, run: any, invalidate?: any | undefined) => any;
 		reset: () => void;
@@ -46,38 +57,39 @@
 	};
 
   	const createMapStore = (): IMapStoreActions => {
-  		const { subscribe, update, set } = writable<IMapStoreData>(defaultMapStore);
+  		const { subscribe, update } = writable<IMapStoreData>(defaultMapStore);
 
 		const hideAllText = (mapStore: IMapStoreData) => {
-			mapStore.layers[2].visible = false;
-			mapStore.layers[3].visible = false;
-			mapStore.layers[4].visible = false;
-			mapStore.layers[5].visible = false;
-			mapStore.layers[6].visible = false;
-			mapStore.layers[7].visible = false;
+			mapStore.layers[LayerNames.mapyTextLayer].visible = false;
+			mapStore.layers[LayerNames.mapySmTextLayer].visible = false;
+			mapStore.layers[LayerNames.mapyXsTextLayer].visible = false;
+			mapStore.layers[LayerNames.igrekTextLayer].visible = false;
+			mapStore.layers[LayerNames.igrekSmTextLater].visible = false;
+			mapStore.layers[LayerNames.igrekXsTextLayer].visible = false;
 		};
 
 		const hideAllLayers = (mapStore: IMapStoreData) => {
-			mapStore.layers[0].visible = false;
-			mapStore.layers[1].visible = false;
+			mapStore.layers[LayerNames.mapyLayer].visible = false;
+			mapStore.layers[LayerNames.igrekLayer].visible = false;
 			hideAllText(mapStore);
 		};
 
 		const handleTextLayers = (mapStore: IMapStoreData) => {
 			if (mapStore.mode && mapStore.layers.length === maxLayers) {
-				mapStore.layers[3].visible = mapStore.zoom >= 8;
-				mapStore.layers[5].visible = mapStore.zoom === 7;
-				mapStore.layers[7].visible = mapStore.zoom === 6;
+				mapStore.layers[LayerNames.igrekTextLayer].visible = mapStore.zoom >= 9;
+				mapStore.layers[LayerNames.igrekSmTextLater].visible = mapStore.zoom === 8;
+				mapStore.layers[LayerNames.igrekXsTextLayer].visible = mapStore.zoom === 7;
 			} else if (!mapStore.mode && mapStore.layers.length === maxLayers) {
-				mapStore.layers[2].visible = mapStore.zoom >= 9;
-				mapStore.layers[4].visible = mapStore.zoom === 8;
-				mapStore.layers[6].visible = mapStore.zoom === 7;
+				mapStore.layers[LayerNames.mapyTextLayer].visible = mapStore.zoom >= 10;
+				mapStore.layers[LayerNames.mapySmTextLayer].visible = mapStore.zoom === 9;
+				mapStore.layers[LayerNames.mapyXsTextLayer].visible = mapStore.zoom === 8;
 			}
 		};
 
 		const handleSelectedRegion = (mapStore: IMapStoreData, layerIndex: number, region?: IRegion) => {
+			const mapLayers = mapStore.layers.filter((_value, index) => index === LayerNames.mapyLayer || index === LayerNames.igrekLayer);
 			for (let i = 0; i < 2; i++) {
-				for (const graphic of mapStore.layers[i].graphics) {
+				for (const graphic of mapLayers[i].graphics) {
 					if (region && graphic.attributes.region.id === region.id && i === layerIndex) {
 						graphic.symbol = selectedRegion; 
 					} else if (!graphic.attributes.region.maps || graphic.attributes.region.maps.length === 0) {
@@ -103,10 +115,10 @@
 			hideAllLayers(mapStore);
 
 			if (mapStore.mode) { 
-				mapStore.layers[0].visible = true;
+				mapStore.layers[LayerNames.mapyLayer].visible = true;
 				mapStore.mode = false;
 			} else {
-				mapStore.layers[1].visible = true;
+				mapStore.layers[LayerNames.igrekLayer].visible = true;
 				mapStore.mode = true;
 			}
 

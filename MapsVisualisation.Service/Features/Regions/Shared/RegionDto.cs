@@ -42,9 +42,14 @@ public class RegionDto
                 PublishYear = map.PublishYear,
                 Dpi = map.Dpi,
                 CollectionName = map.CollectionName,
-                ImageUrl = map.ImageUrl,
+                ImageUrl = GetImageUrl(map, pathProvider),
                 Thumbnail = @$"https://localhost:7178/{pathProvider.GetThumbnailsFolder()}/" + map.Thumbnail,
             };
+        }
+
+        private static string? GetImageUrl(Map map, IPathProvider pathProvider)
+        {
+            return map.LocalImage is null ? map.ImageUrl : @$"https://localhost:7178/{pathProvider.GetMapsImagesFolder()}/" + map.LocalImage;
         }
 
         public static List<OtherSourcesDto> MapOtherSources(List<OtherSource> otherSources)

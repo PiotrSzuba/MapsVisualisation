@@ -22,7 +22,7 @@
     const igrekSmTextLater = new GraphicsLayer();
     const igrekXsTextLayer = new GraphicsLayer();
 
-    const map = new Map({ basemap: 'osm-standard' });
+    const map = new Map({ basemap: 'osm' });
     const view = new MapView({
     	map: map,
     	zoom: 5,
@@ -110,17 +110,17 @@
     	MapStore.reset();
 
     	MapStore.addLayer(mapyLayer);
+		MapStore.addLayer(mapyTextLayer);
+		MapStore.addLayer(mapySmTextLayer);
+		MapStore.addLayer(mapyXsTextLayer);
     	MapStore.addLayer(igrekLayer);
-    	MapStore.addLayer(mapyTextLayer);
     	MapStore.addLayer(igrekTextLayer);
-    	MapStore.addLayer(mapySmTextLayer);
     	MapStore.addLayer(igrekSmTextLater);
-    	MapStore.addLayer(mapyXsTextLayer);
     	MapStore.addLayer(igrekXsTextLayer);
     };
 
     const createMap = (containerRef: HTMLDivElement) => {
-    	EsriConfig.apiKey = 'AAPK06c14e32e9604c74baaa71b27da9f966o3lN5PcCGm9bdqXw1cYRns1hBIHDpNbr80YtVXMojeMOQ_lC4HMNQ04VLUBMzQBs';
+    	//EsriConfig.apiKey = 'AAPK06c14e32e9604c74baaa71b27da9f966o3lN5PcCGm9bdqXw1cYRns1hBIHDpNbr80YtVXMojeMOQ_lC4HMNQ04VLUBMzQBs';
 
     	//binds div element to map so it will render in this div
     	view.container = containerRef;
@@ -194,7 +194,7 @@
     				const graphicHit = viewHit as __esri.GraphicHit;
     				if (!graphicHit || !graphicHit.graphic) return;
 
-    				const region = graphicHit.graphic.attributes.region as IRegion;
+    				const region = graphicHit.graphic.attributes.region as IRegion | undefined;
 
     				//Handle chosen region
     				MapStore.choseRegion(region);

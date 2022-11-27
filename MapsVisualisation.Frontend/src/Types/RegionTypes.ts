@@ -5,13 +5,6 @@ export enum RegionType {
     MapyAmzp,
     Unknown,
 }
-
-export interface INewRegion {
-    germanRegionName: string;
-    polishRegionName?: string;
-    regionNumber: number;
-}
-
 export interface IRegion {
     id: string;
     regionName1: string;

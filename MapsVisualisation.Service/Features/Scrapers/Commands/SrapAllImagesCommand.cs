@@ -23,7 +23,6 @@ public class SrapAllImagesCommand : ICommand<List<string>>
 
         public async Task<List<string>> Handle(SrapAllImagesCommand request, CancellationToken cancellationToken)
         {
-            //Limiter for mapy.amzp ~ 40 s for every 4 photos
             var maps = await _context.Maps
                 .Include(map => map.Region)
                 .Where(map => map.LocalImage == null && map.ImageUrl != null && map.Region != null)
