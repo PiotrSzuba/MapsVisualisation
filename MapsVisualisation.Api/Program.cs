@@ -10,19 +10,23 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
+
 builder.Logging.ConfigureLogging();
 
 builder.Services.AddDbContext<MapsVisualisationContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MapsVisualisationContext")));
+    options.UseSqlServer(configuration.GetConnectionString("MapsVisualisationContext")));
 
-builder.Services.AddSingleton<IPathProvider, PathProvider>(provider => new PathProvider(builder.Environment.ContentRootPath));
+builder.Services.AddSingleton<IPathProvider, PathProvider>(provider => 
+    new PathProvider(builder.Environment.ContentRootPath, configuration));
+
 builder.Services.AddCors();
 builder.Services.AddDirectoryBrowser();
 builder.Services.AddServicesDependency();
 
 var app = builder.Build();
 
-app.ConfigureStaticFiles(builder.Environment.ContentRootPath, PathProvider.ThumbnailsFolder, PathProvider.MapsImagesFolder);
+app.ConfigureStaticFiles(builder.Environment.ContentRootPath, GetThumbnailsFolderName(configuration), GetMapImagesFolderName(configuration));
 
 app.ConfigureExceptionHandler();
 
@@ -41,3 +45,14 @@ app.MapGet("/", () => "Hello world !");
 
 
 app.Run();
+
+
+string GetThumbnailsFolderName(IConfiguration configuration)
+{
+    return configuration.GetSection("StaticFile").GetSection("ThumbnailsFolder").Value;
+}
+
+string GetMapImagesFolderName(IConfiguration configuration)
+{
+    return configuration.GetSection("StaticFile").GetSection("MapImagesFolder").Value;
+}

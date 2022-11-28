@@ -1,4 +1,6 @@
-﻿namespace MapsVisualisation.Service.Services;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace MapsVisualisation.Service.Services;
 
 public interface IPathProvider
 {
@@ -11,15 +13,17 @@ public interface IPathProvider
 
 public class PathProvider : IPathProvider
 {
-    public const string ThumbnailsFolder = "Thumbnails";
-    public const string MapsImagesFolder = "MapsImages";
+    public static string ThumbnailsFolder { get; set; } = string.Empty;
+    public static string MapsImagesFolder { get; set; } = string.Empty;
     public string Root { get; set; }
     public string ThumbnailsPath { get; set; }
     public string MapsImagesPath { get; set; }
 
-    public PathProvider(string root)
+    public PathProvider(string root, IConfiguration configuration)
     {
         Root = root;
+        ThumbnailsFolder = configuration.GetSection("StaticFile").GetSection("ThumbnailsFolder").Value;
+        MapsImagesFolder = configuration.GetSection("StaticFile").GetSection("MapImagesFolder").Value;
         ThumbnailsPath = Path.Combine(root, ThumbnailsFolder);
         MapsImagesPath = Path.Combine(root, MapsImagesFolder);
     }
