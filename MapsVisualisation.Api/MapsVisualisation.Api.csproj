@@ -8,12 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MapImages\**" />
     <Compile Remove="MapsImages\**" />
     <Compile Remove="Thumbnails\**" />
+    <Content Remove="MapImages\**" />
     <Content Remove="MapsImages\**" />
     <Content Remove="Thumbnails\**" />
+    <EmbeddedResource Remove="MapImages\**" />
     <EmbeddedResource Remove="MapsImages\**" />
     <EmbeddedResource Remove="Thumbnails\**" />
+    <None Remove="MapImages\**" />
     <None Remove="MapsImages\**" />
     <None Remove="Thumbnails\**" />
   </ItemGroup>

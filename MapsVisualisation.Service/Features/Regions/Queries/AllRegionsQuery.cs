@@ -14,12 +14,17 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
     internal class AllRegionsQueryHandler : IQueryHandler<AllRegionsQuery, List<RegionDto>>
     {
         private readonly MapsVisualisationContext _context;
+        private readonly IDomainProvider _domainProvider;
         private readonly IPathProvider _pathProvider;
 
-        public AllRegionsQueryHandler(MapsVisualisationContext context, IPathProvider pathProvider)
+        public AllRegionsQueryHandler(
+            MapsVisualisationContext context,
+            IDomainProvider domainProvider,
+            IPathProvider pathProvider)
         {
             _context = context;
             _pathProvider = pathProvider;
+            _domainProvider = domainProvider;
         }
 
         public async Task<List<RegionDto>> Handle(AllRegionsQuery request, CancellationToken cancellationToken)
@@ -48,7 +53,7 @@ public class AllRegionsQuery : IQuery<List<RegionDto>>
                 SWLat = region.SWLat,
                 SWLong = region.SWLong,
                 Type = region.RegionType,
-                Maps = RegionDto.Mapper.MapMaps(region.Maps.ToList(), _pathProvider),
+                Maps = RegionDto.Mapper.MapMaps(region.Maps.ToList(), _pathProvider, _domainProvider),
                 OtherSources = RegionDto.Mapper.MapOtherSources(region.OtherSources.ToList()),
             }).ToList();
         }

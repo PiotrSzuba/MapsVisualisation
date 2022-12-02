@@ -13,11 +13,11 @@ public interface IPathProvider
 
 public class PathProvider : IPathProvider
 {
-    public static string ThumbnailsFolder { get; set; } = string.Empty;
-    public static string MapsImagesFolder { get; set; } = string.Empty;
-    public string Root { get; set; }
-    public string ThumbnailsPath { get; set; }
-    public string MapsImagesPath { get; set; }
+    private static string ThumbnailsFolder { get; set; } = string.Empty;
+    private static string MapsImagesFolder { get; set; } = string.Empty;
+    private string Root { get; set; }
+    private string ThumbnailsPath { get; set; }
+    private string MapsImagesPath { get; set; }
 
     public PathProvider(string root, IConfiguration configuration)
     {

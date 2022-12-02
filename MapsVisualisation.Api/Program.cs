@@ -17,8 +17,8 @@ builder.Logging.ConfigureLogging();
 builder.Services.AddDbContext<MapsVisualisationContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("MapsVisualisationContext")));
 
-builder.Services.AddSingleton<IPathProvider, PathProvider>(provider => 
-    new PathProvider(builder.Environment.ContentRootPath, configuration));
+builder.Services.AddSingleton<IPathProvider, PathProvider>(provider => new PathProvider(builder.Environment.ContentRootPath, configuration));
+builder.Services.AddSingleton<IDomainProvider, DomainProvider>(provider => new DomainProvider(configuration));
 
 builder.Services.AddCors();
 builder.Services.AddDirectoryBrowser();
@@ -30,11 +30,13 @@ app.ConfigureStaticFiles(builder.Environment.ContentRootPath, GetThumbnailsFolde
 
 app.ConfigureExceptionHandler();
 
+app.Urls.Add(configuration.GetSection("ApplicationUrl").Value);
+
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true)
-    .WithOrigins("http://127.0.0.1:5173")
+    .WithOrigins(configuration.GetSection("FrontendAppUrl").Value)
     .AllowCredentials());
 
 app.UseHttpsRedirection();

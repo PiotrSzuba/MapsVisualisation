@@ -24,17 +24,17 @@ public class RegionDto
 
     public static class Mapper
     {
-        public static List<MapDto> MapMaps(List<Map> maps, IPathProvider pathProvider)
+        public static List<MapDto> MapMaps(List<Map> maps, IPathProvider pathProvider, IDomainProvider domainProvider)
         {
             return maps
                 .DistinctBy(map => map.Thumbnail)
-                .Select(map => MapMapDto(map, pathProvider))
+                .Select(map => MapMapDto(map, pathProvider, domainProvider))
                 .OrderByDescending(map => map.PublishYear)
                 .ThenBy(map => map.Dpi)
                 .ToList();
         }
 
-        private static MapDto MapMapDto(Map map, IPathProvider pathProvider)
+        private static MapDto MapMapDto(Map map, IPathProvider pathProvider, IDomainProvider domainProvider)
         {
             return new MapDto
             {
@@ -42,14 +42,14 @@ public class RegionDto
                 PublishYear = map.PublishYear,
                 Dpi = map.Dpi,
                 CollectionName = map.CollectionName,
-                ImageUrl = GetImageUrl(map, pathProvider),
-                Thumbnail = @$"https://localhost:7178/{pathProvider.GetThumbnailsFolder()}/" + map.Thumbnail,
+                ImageUrl = GetImageUrl(map, pathProvider, domainProvider),
+                Thumbnail = @$"{domainProvider.GetDomainName()}/{pathProvider.GetThumbnailsFolder()}/" + map.Thumbnail,
             };
         }
 
-        private static string? GetImageUrl(Map map, IPathProvider pathProvider)
+        private static string? GetImageUrl(Map map, IPathProvider pathProvider, IDomainProvider domainProvider)
         {
-            return map.LocalImage is null ? map.ImageUrl : @$"https://localhost:7178/{pathProvider.GetMapsImagesFolder()}/" + map.LocalImage;
+            return map.LocalImage is null ? map.ImageUrl : @$"{domainProvider.GetDomainName()}/{pathProvider.GetMapsImagesFolder()}/" + map.LocalImage;
         }
 
         public static List<OtherSourcesDto> MapOtherSources(List<OtherSource> otherSources)
