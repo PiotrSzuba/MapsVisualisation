@@ -31,7 +31,6 @@ public static class MapyAmzpScraper
                     var info = col.ChildNodes.Where(c => c.Name == "i" || c.Name == "#text").ToList();
                     var number = info[0].InnerText.Replace("\n", "").Replace(" ", "");
                     var name = info[1].InnerText.Replace("\n", "").Replace(" ", "");
-                    //Console.WriteLine($"{number} : {name} not complete");
                     regions.Add(new RegionInfo(number, new() { name }));
                 }
                 if (css == "a1")
