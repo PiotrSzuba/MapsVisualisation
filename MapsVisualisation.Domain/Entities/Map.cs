@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MapsVisualisation.Domain.Entities;
+﻿namespace MapsVisualisation.Domain.Entities;
 
 public class Map
 {
@@ -16,18 +13,32 @@ public class Map
 
     public Map() { } //ef
 
-    private Map(int year, int dpi, string imageUrl, string? collectionName = null, string? thumbnail = null)
+    private Map(int year, 
+        int dpi, 
+        string imageUrl, 
+        string? collectionName = null, 
+        string? thumbnail = null,
+        string? localImage = null)
     {
         PublishYear = year;
         Dpi = dpi;
         ImageUrl = imageUrl;
         CollectionName = collectionName;
         Thumbnail = thumbnail;
+        LocalImage = localImage;
     }
 
-    public static Map Create(Region region, int year, int dpi, string imageUrl, string? collectionName = null, string? thumbnail = null)
+    public static Map Create(
+        Region region, 
+        int year, 
+        int dpi, 
+        string imageUrl, 
+        string? collectionName = null, 
+        string? thumbnail = null,
+        string? localImage = null
+        )
     {
-        return new Map(year, dpi, imageUrl, collectionName, thumbnail)
+        return new Map(year, dpi, imageUrl, collectionName, thumbnail, localImage)
         {
             Region = region,
         };

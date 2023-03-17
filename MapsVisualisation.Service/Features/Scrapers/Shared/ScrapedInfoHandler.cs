@@ -6,18 +6,21 @@ using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using MapsVisualisation.WebScrapers.RegionScrapers;
 using MapsVisualisation.WebScrapers.Helpers;
+using RegionInfo = MapsVisualisation.WebScrapers.RegionScrapers.RegionInfo;
 
 namespace MapsVisualisation.Service.Features.Scrapers.Shared;
 
 public interface IScrapedInfoHandler
 {
-    Task Handle(List<RegionInfo> regionInfos);
+    Task Handle(List<RegionInfo> regionInfos, RegionType regionType);
 }
 
 public class ScrapedInfoHandler : IScrapedInfoHandler
 {
     private readonly MapsVisualisationContext _context;
     private readonly IPathProvider _pathProvider;
+    private bool ChangesWereMade = false;
+    private bool RegionPresent = false;
 
     public ScrapedInfoHandler(MapsVisualisationContext contex, IPathProvider pathProvider)
     {
@@ -25,7 +28,7 @@ public class ScrapedInfoHandler : IScrapedInfoHandler
         _pathProvider = pathProvider;
     }
 
-    public async Task Handle(List<RegionInfo> regionInfos)
+    public async Task Handle(List<RegionInfo> regionInfos, RegionType regionType)
     {
         foreach (var regionInfo in regionInfos)
         {
@@ -33,81 +36,57 @@ public class ScrapedInfoHandler : IScrapedInfoHandler
                 .Include(r => r.Maps)
                 .SingleOrDefaultAsync(r => r.RegionIdentity == regionInfo.RegionIdentity);
 
-            var regionPresent = region is not null;
+            RegionPresent = region is not null;
+            ChangesWereMade = false;
 
-            if (region is null)
-            {
-                region = Region.Create(
+            region ??= Region.Create(
                     regionInfo.RegionName1 ?? "",
                     regionInfo.RegionName2 ?? "",
                     regionInfo.RegionName3 ?? "",
-                    regionInfo.RegionIdentity ?? "");
+                    regionInfo.RegionIdentity ?? "",
+                    regionType);
 
-            }
-            var changesWereMade = false;
             if (regionInfo.Maps is not null)
             {
                 foreach (var mapInfo in regionInfo.Maps)
                 {
-                    if (!regionPresent)
-                    {
-                        var urlPresent = region.Maps.SingleOrDefault(m => m.ImageUrl == mapInfo.ImageUrl);
-
-                        if (urlPresent is not null) continue;
-
-                        string? thumbnail = null;
-
-                        if (!File.Exists(GetFilePath(regionInfo, mapInfo)))
-                        {
-                            var thumbnailImage = await ThumbnailGenerator.GetThumbnailImage(mapInfo.ImageUrl);
-
-                            thumbnail = await SaveImage(thumbnailImage, regionInfo, mapInfo);
-                        }
-                        else
-                        {
-                            thumbnail = GetFileName(regionInfo, mapInfo);
-                        }
-
-                        region.AddMap(mapInfo.PublishYear, mapInfo.Dpi, mapInfo.ImageUrl, mapInfo.CollectionName, thumbnail);
-                        continue;
-                    }
-
-                    var existingMap = region.Maps.SingleOrDefault(m => m.ImageUrl == mapInfo.ImageUrl);
-
-                    if (existingMap is null)
-                    {
-                        changesWereMade = true;
-
-                        string? thumbnail = null;
-                        var path = GetFilePath(regionInfo, mapInfo);
-
-                        if (!File.Exists(path))
-                        {
-                            var thumbnailImage = await ThumbnailGenerator.GetThumbnailImage(mapInfo.ImageUrl);
-
-                            thumbnail = await SaveImage(thumbnailImage, regionInfo, mapInfo);
-                        }
-                        else
-                        {
-                            thumbnail = GetFileName(regionInfo, mapInfo);
-                        }
-
-                        region.AddMap(mapInfo.PublishYear, mapInfo.Dpi, mapInfo.ImageUrl, mapInfo.CollectionName, thumbnail);
-                        continue;
-                    }
+                    await HandleMapInfo(region, regionInfo, mapInfo);
                 }
             }
 
-            if (!regionPresent)
+            if (!RegionPresent)
             {
                 Console.WriteLine($"Added new region {region.RegionIdentity}");
                 _context.Regions.Add(region);
             }
-            else if (changesWereMade)
+            else if (ChangesWereMade)
             {
                 Console.WriteLine($"Updated region {region.RegionIdentity}");
                 _context.Regions.Update(region);
             }
+        }
+    }
+
+    private async Task HandleMapInfo(Region region, RegionInfo regionInfo, MapInfo mapInfo)
+    {
+        var existingMap = region.Maps
+            .SingleOrDefault(m => m.Dpi == mapInfo.Dpi && m.PublishYear == mapInfo.PublishYear);
+
+        if (existingMap is not null) return;
+
+        var fileName = GetFileName(regionInfo, mapInfo);
+        var imageData = await DownloadImageAsync(mapInfo);
+
+        if (imageData.Length == 0) return;
+
+        var localImage = await SaveImage(imageData, fileName);
+        var thumbnail = await SaveThumbnail(imageData, fileName);
+
+        region.AddMap(mapInfo.PublishYear, mapInfo.Dpi, mapInfo.ImageUrl, mapInfo.CollectionName, thumbnail, localImage);
+
+        if (RegionPresent)
+        {
+            ChangesWereMade = true;
         }
     }
 
@@ -124,21 +103,60 @@ public class ScrapedInfoHandler : IScrapedInfoHandler
         return path;
     }
 
-    private string GetFilePath(RegionInfo regionInfo, MapInfo mapInfo)
+    private string GetThumbnailFilePath(string thumbnailName)
     {
-        var path = GetFileName(regionInfo, mapInfo);
-
-        return Path.Combine(_pathProvider.GetThumbnailsPath(), path);
+        return Path.Combine(_pathProvider.GetThumbnailsPath(), thumbnailName);
     }
 
-    private async Task<string?> SaveImage(Image? image, RegionInfo regionInfo, MapInfo mapInfo)
+    private string GetImageFilePath(string imageName)
     {
-        if (image == null) return null;
+        return Path.Combine(_pathProvider.GetMapsImagesPath(), imageName);
+    }
 
-        var path = GetFilePath(regionInfo, mapInfo);
+    private async Task<string?> SaveThumbnail(byte[] imageData, string thumbnailName)
+    {
+        var thumbnailPath = GetThumbnailFilePath(thumbnailName);
 
-        await image.SaveAsJpegAsync(path);
+        if (File.Exists(thumbnailPath))
+        {
+            return thumbnailName;
+        }
 
-        return GetFileName(regionInfo, mapInfo);
+        var thumbnailImage = ThumbnailGenerator.GetThumbnailImage(imageData);
+
+        if (thumbnailImage == null) return null;
+
+        await thumbnailImage.SaveAsJpegAsync(thumbnailPath);
+
+        return thumbnailName;
+    }
+
+    private async Task<string> SaveImage(byte[] imageData, string imageName)
+    {
+        var imagePath = GetImageFilePath(imageName);
+
+        if (File.Exists(imagePath))
+        {
+            return imageName;
+        }
+
+        await File.WriteAllBytesAsync(imagePath, imageData);
+
+        return imageName;
+    }
+
+
+    private async Task<byte[]> DownloadImageAsync(MapInfo mapInfo)
+    {
+        try
+        {
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(mapInfo.ImageUrl);
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        catch
+        {
+            return Array.Empty<byte>();
+        }
     }
 }

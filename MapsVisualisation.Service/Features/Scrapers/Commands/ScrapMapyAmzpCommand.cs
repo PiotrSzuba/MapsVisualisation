@@ -1,4 +1,5 @@
-﻿using MapsVisualisation.Service.BuildingBlocks;
+﻿using MapsVisualisation.Domain.Entities;
+using MapsVisualisation.Service.BuildingBlocks;
 using MapsVisualisation.Service.Features.Scrapers.Shared;
 using MapsVisualisation.WebScrapers.RegionScrapers;
 
@@ -19,7 +20,7 @@ public class ScrapMapyAmzpCommand : ICommand<List<RegionInfo>>
         {
             var regions = MapyAmzpScraper.Run();
 
-            await _scrapedInfoHandler.Handle(regions);
+            await _scrapedInfoHandler.Handle(regions, RegionType.Messtischblatt);
 
             return regions;
         }

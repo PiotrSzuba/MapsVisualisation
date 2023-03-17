@@ -72,11 +72,7 @@ public class SrapAllImagesCommand : ICommand<List<string>>
             {
                 using var client = new HttpClient();
                 using var response = await client.GetAsync(map.ImageUrl, cancellationToken);
-                using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-                using var memoryStream = new MemoryStream();
-                stream.CopyTo(memoryStream);
-
-                return memoryStream.ToArray();
+                return await response.Content.ReadAsByteArrayAsync(cancellationToken);
             }
             catch
             {

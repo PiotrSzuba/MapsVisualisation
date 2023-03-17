@@ -1,23 +1,20 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { GetAllRegions } from 'src/Services';
-  import { Map, Circle, MapStore } from 'src/Components';
+  import { Map, MapStore } from 'src/Components';
 
-  onMount(async () => {
+  const asyncFun = async (): Promise<void> => {
     const data = await GetAllRegions();
     if (!data) return;
     MapStore.setRegions(data);
+  }
+
+  afterUpdate(async () => {
+    setTimeout(async () => {
+      asyncFun();
+    }, 1);
   });
 
 </script>
 
-{#if $MapStore.regions.length !== 0}
-  <Map regions={$MapStore.regions} />
-{/if}
-{#if $MapStore.regions.length === 0}
-  <div class="flex h-screen">
-    <div class="mx-auto my-auto h-16 w-16">
-      <Circle />
-    </div>
-  </div>
-{/if}
+<Map />

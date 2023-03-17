@@ -21,7 +21,7 @@ public class ScrapSbcCommand : ICommand
         public async Task<Unit> Handle(ScrapSbcCommand request, CancellationToken cancellationToken)
         {
             var regions = await _context.Regions
-                .Where(r => r.RegionType == RegionType.MapyAmzp)
+                .Where(r => r.RegionType == RegionType.Messtischblatt)
                 .Include(r => r.OtherSources)
                 .ToListAsync(cancellationToken: cancellationToken);
 

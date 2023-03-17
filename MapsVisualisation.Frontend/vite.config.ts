@@ -12,5 +12,8 @@ export default defineConfig({
 	plugins: [svelte(), tsconfigPaths()],
 	css:{
 		postcss
+	},
+	build: {
+		outDir: '../MapsVisualisation.Api/SvelteApp'
 	}
 });

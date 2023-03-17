@@ -13,7 +13,7 @@ public static class KpbcScraper
 
         var regionIdentity = GetRegionIdentity(region);
 
-        var key = region.RegionType == RegionType.IgrekAmzp ?
+        var key = region.RegionType == RegionType.Wig100 ?
             $"{regionIdentity}" : 
             $"[Neue Nr {regionIdentity}]";
 
@@ -46,7 +46,7 @@ public static class KpbcScraper
 
     private static string GetRegionIdentity(Region region)
     {
-        if (region.RegionType == RegionType.MapyAmzp)
+        if (region.RegionType == RegionType.Messtischblatt)
         {
             return region.RegionIdentity;
         }
@@ -62,7 +62,7 @@ public static class KpbcScraper
 
     private static string GetSearchQuery(Region region, string regionIdentity)
     {
-        if (region.RegionType == RegionType.MapyAmzp)
+        if (region.RegionType == RegionType.Messtischblatt)
         {
             return $"{region.RegionIdentity}+{region.RegionName1}";
         }

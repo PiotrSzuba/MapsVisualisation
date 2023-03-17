@@ -111,9 +111,9 @@
                     .toLowerCase()
                     .includes(searchQuery.toLowerCase())) || ( r.regionName3 && 
                 r.regionName3
-                .substring(0, searchQuery.length)
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())))
+                    .substring(0, searchQuery.length)
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase())))
     		.slice(0, 10)
     		.sort();
     };
@@ -169,7 +169,8 @@
         />
         {#if search.length !== 0}
             <div 
-                class="absolute my-auto h-8 w-8 ml-auto cursor-pointer z-50 text-white-700 right-2 top-[21%] hover:text-white-100"
+                class="absolute my-auto h-8 w-8 ml-auto cursor-pointer z-50 text-white-700 right-2 
+                top-[21%] hover:text-white-100"
                 on:click={() => resetSearch()}
                 on:keypress={() => resetSearch()}
             >

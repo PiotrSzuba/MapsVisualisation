@@ -14,6 +14,9 @@ public class RegionInfo
 
         switch (names.Count)
         {
+            case 0:
+                RegionName1= string.Empty;
+                break;
             case 1:
                 RegionName1 = names[0];
                 break;

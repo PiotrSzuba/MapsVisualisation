@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 
 //get from env
-const baseUrl = 'https://localhost:7178'; 
+const baseUrl = 'https://localhost:7178/api'; 
 
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: `${baseUrl}`,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace MapsVisualisation.Api.Infrastructure.Extensions;
 
@@ -8,6 +9,12 @@ public static class StaticFilesConfiguration
     {
         app.ConfigureDirectory(rootPath, thumbnailsFolder);
         app.ConfigureDirectory(rootPath, mapImagesFolder);
+
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.Combine(rootPath, "SvelteApp")),
+        });
     }
 
     private static void ConfigureDirectory(this IApplicationBuilder app, string rootPath, string folderName)

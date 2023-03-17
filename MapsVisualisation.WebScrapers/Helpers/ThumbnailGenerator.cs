@@ -7,21 +7,21 @@ public static class ThumbnailGenerator
 {
     public static async Task<Image?> GetThumbnailImage(string imageUrl)
     {
-        return await DownloadImageFromUrl(imageUrl);
+        var imageData = await DownloadImageFromUrl(imageUrl);
+
+        return GenerateThumbnail(imageData);
     }
 
-    private static async Task<Image?> DownloadImageFromUrl(string imageUrl)
+    public static Image? GetThumbnailImage(byte[] imageData)
     {
-        using var client = new HttpClient();
-        using var response = await client.GetAsync(imageUrl);
-        using var stream = await response.Content.ReadAsStreamAsync();
-        byte[] bytes;
-        using var memoryStream = new MemoryStream();
-        stream.CopyTo(memoryStream);
-        bytes = memoryStream.ToArray();
+        return GenerateThumbnail(imageData);
+    }
+
+    private static Image? GenerateThumbnail(byte[] imageData)
+    {
         try
         {
-            var image = Image.Load(bytes);
+            var image = Image.Load(imageData);
 
             var scale = image.Height / 256;
 
@@ -35,6 +35,20 @@ public static class ThumbnailGenerator
         catch
         {
             return null;
+        }
+    }
+
+    private static async Task<byte[]> DownloadImageFromUrl(string imageUrl)
+    {
+        try
+        {
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(imageUrl);
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        catch
+        {
+            return Array.Empty<byte>();
         }
     }
 }

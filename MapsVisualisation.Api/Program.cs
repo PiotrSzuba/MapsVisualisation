@@ -5,6 +5,9 @@ using MapsVisualisation.Service;
 using MapsVisualisation.Service.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.FileProviders;
 
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -43,8 +46,12 @@ app.UseHttpsRedirection();
 
 app.AddControllers();
 
-app.MapGet("/", () => "Hello world !");
-
+app.MapGet("/", async (context) =>
+{
+    string indexHtmlPath = Path.Combine(builder.Environment.ContentRootPath, "SvelteApp", "index.html");
+    string indexHtml = await File.ReadAllTextAsync(indexHtmlPath);
+    await context.Response.WriteAsync(indexHtml);
+});
 
 app.Run();
 
